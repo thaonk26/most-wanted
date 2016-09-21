@@ -339,11 +339,12 @@ function findPersonInfo(){
 			alert("I'm sorry, but that's not an option. Please try again")
 			break;
 		}
-		findPersonInfo();
+		//findPersonInfo();
 	}
 	function exitWebPage(){
 		//setTimeout (window.close, 1000);
-	window.close(); 
+		//open(location, '_self').close();
+	//window.close(); 
 }
 
 	function getPersonInfo(firstname,lastname){
