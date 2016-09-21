@@ -309,6 +309,7 @@ function findPersonInfo(answer){
 		case "1":
 		var result = getPersonInfo(prompt("What is the person's first name?"),  prompt("What is their last name?"))
 		displayPerson(dataObject[result]);
+		displayPerson(getSpouse(personToList));
 		break;
 		case "2":
 		var result = getPersonInfo(prompt("What is the person's first name?"),  prompt("What is their last name?"))
@@ -325,8 +326,7 @@ function findPersonInfo(answer){
 			displayListOfPeople(personToList);
 			break;
 		case "4":
-			var result = prompt("How old are they?")
-			getAge(result);
+			searchAge(prompt("How old are they?"));
 			displayListOfPeople(personToList);
 			break;
 		case "5": 
@@ -352,18 +352,35 @@ function findPersonInfo(answer){
 		}
 	}
 }
+function searchAge(age){
+	for(var a in dataObject){
+		if(getAge(dataObject[a].dob) ==  parseInt(age))
+  				personToList.push(a);
+	}
+}
 function getAge(age){
 	var today = new Date();
 	var currentYear = today.getFullYear();
 	var currentMonth = today.getMonth();
 	var currentDay = today.getDate(); 
-	for(var key in dataObject){
-		var birthdate = dataObject[key].dob.split("/");
-		var date = new Date(birthdate[2]-currentMonth, birthdate[1]-currentDay, birthdate[0]-currentYear);
-		if(date === birthdate){
-			personToList.push(key);
-		}
-	}
+
+	var currentDOB = age.split("/");
+	var birthYear = currentDOB[2];
+	var birthMonth = currentDOB[0];
+	var birthDay = currentDOB[1];
+
+	var ageYear = (currentYear - birthYear);
+	var ageMonth =(currentMonth - birthMonth);
+	var ageDay = (currentDay - birthDay);
+
+	if(ageMonth < 0 || (ageMonth == 0 && ageDay < 0)) {
+            ageYear = ageYear -1;
+        }
+        ageYear = parseInt(ageYear);
+    	return ageYear;
+}
+function getSpouse(person){
+	getTrait("currentSpouse", person);
 }
 function getTrait(traitType, userInput){
 	for(var key in dataObject){
