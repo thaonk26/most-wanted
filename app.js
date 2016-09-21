@@ -265,39 +265,43 @@ var dataObject = {
 	}
 };
 
-/*  Remove this from your final submission
-function printAllToConsole(dataObj){
+
+/*function printAllToConsole(dataObj){
 	for (var key in dataObj) {
 		if (dataObj.hasOwnProperty(key)) {
-			console.log(key + " -> " + JSON.stringify(dataObj[key]));
+			console.log(key + " -> " + JSON.stringify(dataObj[key]);
 		}
 	}
 }
-printAllToConsole(dataObject);
-*/
+printAllToConsole(dataObject);*/
+
 
 function initSearch(){
 	alert("Hello World");
 
 	// get all the information you need to run the search
 	var yourName = prompt("Who do you want to search for?");
-
+	var LName = prompt("What is their last name?");
 	// then pass that info to the respective function.
-	var result = getPersonInfo("J", "T")
-
+	var result = getPersonInfo(yourName, LName)
+	console.log(result);
 	// once the search is done, pass the results to the responder function
-	responder(result);
 }
 
-function responder(results){
-	// results may be a list of strings, an object, or a single string. 
-	alert(results);
-}
+function getPersonInfo(firstname,lastname){
 
-function getPersonInfo(firstname, lastname){
-	var result = "This will be the information for whoever you searched for";
-	// look up person's information
-	return result;
+	for (var key in dataObject) {
+		if (dataObject.hasOwnProperty(key)) {
+			//console.log(obj.firstName, obj.lastName);
+			if(firstname === dataObject[key].firstName && lastname === dataObject[key].lastName){
+				//console.log(dataObject[key]);
+				return dataObject[key];
+		}
+		}
+	}
+
+
+
 }
 
 function getFamily(){
@@ -307,4 +311,4 @@ function getFamily(){
 // there will be much more here, and some of the code above will certainly change
 
 initSearch();
-window.close(); // exit window as the end of the session -- you may remove this
+//window.close(); // exit window as the end of the session -- you may remove this
