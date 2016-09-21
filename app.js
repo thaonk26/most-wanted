@@ -328,6 +328,7 @@ function findPersonInfo(answer){
 			var result = prompt("How old are they?")
 			getAge(result);
 			displayListOfPeople(personToList);
+			break;
 		case "5": 
 			var result = prompt("What occupation are you looking for?")
 			getOccupation(result);
