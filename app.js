@@ -309,8 +309,11 @@ function findPersonInfo(answer){
 			break;
 		case "2":
 			var result = getPersonInfo(prompt("What is the person's first name?"),  prompt("What is their last name?"))
-			getDescendant(result);
+			var descendant = getDescendant(result);
+			if(descendant != 0){
 			displayListOfPeople(personToList);
+			}
+			alert("This person has no descendants");
 			//console.log(result);
 			break;
 		case "3":
