@@ -285,61 +285,67 @@ var personToList = [];
 	'parents': [],
 	'currentSpouse': []
 };*/
-
-function initSearch(){
-
-	// get all the information you need to run the search
-	// then pass that info to the respective function.
-	//var result = getPersonInfo(prompt("What is the person's first name?"),  prompt("What is their last name?"))
-	//console.log(result);
-    var answer = findPersonInfo(prompt("Type 1 if you want to search by first AND last name.\r\n" +
+findPersonInfo();
+function findPersonInfo(){
+	    var answer = prompt("Type 1 if you want to search by first AND last name.\r\n" +
         " Type 2 if you want to search for a person's descendant(s). \n** First and last name required **\r\n" +
         " Type 3 if you want to search by physical traits (up to 5 traits).\r\n" +
         " Type 4 if you want to search by age.\r\n" +
         " Type 5 if you want to search by occupation.\r\n" + 
         " Type 6 if you want to search by immediate family.\r\n" + 
-        " Type 7 if you want to search by next of kin."
-        ));
-	// once the search is done, pass the results to the responder function
+        " Type 7 if you want to search by next of kin.\r\n" +
+        " Type 'exit' to exit the program."
+        );
 
-}
-function findPersonInfo(answer){
 	switch(answer){
 
 		case "1":
+		personToList = [];
 		var result = getPersonInfo(prompt("What is the person's first name?"),  prompt("What is their last name?"))
 		displayPerson(dataObject[result]);
 		displayPerson(getSpouse(personToList));
 		break;
 		case "2":
-		var result = getPersonInfo(prompt("What is the person's first name?"),  prompt("What is their last name?"))
-		var descendant = getDescendant(result);
-		if(descendant != 0){
+			personToList = [];
+			var result = getPersonInfo(prompt("What is the person's first name?"),  prompt("What is their last name?"))
+			var descendant = getDescendant(result);
+			if(descendant != 0){
 			displayListOfPeople(personToList);
-		}
-		alert("This person has no descendants");
+			}
+			alert("This person has no descendants");
 			//console.log(result);
 			break;
 		case "3":
+			personToList = [];
 			var result = prompt("What trait are you looking for? (gender, height, weight or eye color)");
 			getTrait(result,getPersonTrait(result));
 			displayListOfPeople(personToList);
 			break;
 		case "4":
+			personToList = [];
 			searchAge(prompt("How old are they?"));
 			displayListOfPeople(personToList);
 			break;
 		case "5": 
+			personToList = [];
 			var result = prompt("What occupation are you looking for?")
 			getOccupation(result);
 			displayListOfPeople(personToList);
 			break;
+		case "exit":
+			exitWebPage();
+			break;
 		default:
 			alert("I'm sorry, but that's not an option. Please try again")
-			initSearch();
 			break;
 		}
+		findPersonInfo();
 	}
+	function exitWebPage(){
+		//setTimeout (window.close, 1000);
+	window.close(); 
+}
+
 	function getPersonInfo(firstname,lastname){
 
 		for (var key in dataObject) {
@@ -360,18 +366,10 @@ function searchAge(age){
 }
 function getAge(age){
 	var today = new Date();
-	var currentYear = today.getFullYear();
-	var currentMonth = today.getMonth();
-	var currentDay = today.getDate(); 
-
 	var currentDOB = age.split("/");
-	var birthYear = currentDOB[2];
-	var birthMonth = currentDOB[0];
-	var birthDay = currentDOB[1];
-
-	var ageYear = (currentYear - birthYear);
-	var ageMonth =(currentMonth - birthMonth);
-	var ageDay = (currentDay - birthDay);
+	var ageYear = (today.getFullYear() - currentDOB[2]);
+	var ageMonth =(today.getMonth() - currentDOB[0]);
+	var ageDay = (today.getDate() - currentDOB[1]);
 
 	if(ageMonth < 0 || (ageMonth == 0 && ageDay < 0)) {
             ageYear = ageYear -1;
@@ -445,7 +443,3 @@ function getFamily(){
 	}
 }
 
-// there will be much more here, and some of the code above will certainly change
-
-initSearch();
-//window.close(); // exit window as the end of the session -- you may remove this
