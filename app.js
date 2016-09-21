@@ -292,10 +292,10 @@ function initSearch(){
 	// then pass that info to the respective function.
 	//var result = getPersonInfo(prompt("What is the person's first name?"),  prompt("What is their last name?"))
 	//console.log(result);
-	var answer = findPersonInfo(prompt("Type 1 if you know their first AND last name."+
-		" Type 2 if you know only first OR last name."+
-		" Type 3 if you want to search by their physical trait."+
-		" Type 4 if you want to search by age." +
+	var answer = findPersonInfo(prompt("Type 1 if you want to search by first AND last name."+ "\r\n" +
+		" Type 2 if you want to search for a person's descendant(s). First and last name required." + "\r\n"+
+		" Type 3 if you want to search by physical traits (up to 5 traits)."+"\r\n"+
+		" Type 4 if you want to search by age." +"\r\n"+
 		" Type 5 if you want to search by occupation."));
 	// once the search is done, pass the results to the responder function
 
