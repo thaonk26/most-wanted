@@ -275,8 +275,6 @@ var dataObject = {
 }
 printAllToConsole(dataObject);*/
 var personToList = [];
-var weights = [];
-var heights = [];
 /*var person = {
 	'person': [],
 	'heights': [],
@@ -296,7 +294,9 @@ function initSearch(){
 	//console.log(result);
 	var answer = findPersonInfo(prompt("Type 1 if you know their first AND last name."+
 		" Type 2 if you know only first OR last name."+
-		" Type 3 if you want to search by their physical trait."));
+		" Type 3 if you want to search by their physical trait."+
+		" Type 4 if you want to search by age." +
+		" Type 5 if you want to search by occupation."));
 	// once the search is done, pass the results to the responder function
 
 }
@@ -314,8 +314,12 @@ function findPersonInfo(answer){
 		case "3":
 			var result = prompt("What trait are you looking for? (gender, height, weight or eye color)");
 			getTrait(result,getPersonTrait(result));
-			displayPerson(personToList);
+			displayListOfPeople(personToList);
 			break;
+		case "4":
+			var result = prompt("How old are they?")
+			getTrait("age",result);
+			displayListOfPeople(personToList);
 		default:
 			alert("I'm sorry, but that's not an option. Please try again")
 			initSearch();
@@ -334,10 +338,16 @@ function getPersonInfo(firstname,lastname){
 		}
 	}
 }
+function getAge(age){
+	for(var key in dataObject){
+		var birth = dataObject[key].dob.split("/");
+
+	}
+}
 function getTrait(traitType, userInput){
 	for(var key in dataObject){
 		if(userInput == dataObject[key][traitType]){
-			personToList.push(dataObject[key]);
+			personToList.push(key);
 		}
 	}
 }
@@ -360,7 +370,11 @@ function getPersonTrait(trait){
 
 	}
 }
-
+function displayListOfPeople(listOfPeople){
+	for(var i = 0; i < listOfPeople.length; i++){
+  			displayPerson(dataObject[listOfPeople[i]]);
+  		}
+}
 function displayPerson(person){
 	var buildPerson = "";
          for(var item in person){
