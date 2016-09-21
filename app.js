@@ -274,7 +274,19 @@ var dataObject = {
 	}
 }
 printAllToConsole(dataObject);*/
-
+var personToList = [];
+var weights = [];
+var heights = [];
+/*var person = {
+	'person': [],
+	'heights': [],
+	'weights': [],
+	'gender': [],
+	'eyecolor': [],
+	'occupation': [],
+	'parents': [],
+	'currentSpouse': []
+};*/
 
 function initSearch(){
 
@@ -282,7 +294,9 @@ function initSearch(){
 	// then pass that info to the respective function.
 	//var result = getPersonInfo(prompt("What is the person's first name?"),  prompt("What is their last name?"))
 	//console.log(result);
-	var answer = findPersonInfo(prompt("Type 1 if you know their first AND last name. Type 2 if you know only first OR last name. Type 3 if you want to search by their physical trait."));
+	var answer = findPersonInfo(prompt("Type 1 if you know their first AND last name."+
+		" Type 2 if you know only first OR last name."+
+		" Type 3 if you want to search by their physical trait."));
 	// once the search is done, pass the results to the responder function
 
 }
@@ -291,15 +305,16 @@ function findPersonInfo(answer){
 
 		case "1":
 			var result = getPersonInfo(prompt("What is the person's first name?"),  prompt("What is their last name?"))
-			console.log(result);
+			displayPerson(personToList);
 			break;
 		case "2":
 			var result = getPersonInfo(prompt("What is the person's first name?"),  prompt("What is their last name?"))
 			//console.log(result);
 			break;
 		case "3":
-			var result = getTrait(prompt("What trait are you looking for? (gender, height, weight or eye color)"));
-			getPersonTrait(result);
+			var result = prompt("What trait are you looking for? (gender, height, weight or eye color)");
+			getTrait(result,getPersonTrait(result));
+			displayPerson(personToList);
 			break;
 		default:
 			alert("I'm sorry, but that's not an option. Please try again")
@@ -314,15 +329,19 @@ function getPersonInfo(firstname,lastname){
 			//console.log(obj.firstName, obj.lastName);
 			if(firstname === dataObject[key].firstName && lastname === dataObject[key].lastName){
 				//console.log(dataObject[key]);
-				return dataObject[key];
-			}
-				else if(firstname === dataObject[key].firstName || lastname === dataObject[key].lastName) {
-				console.log(dataObject[key]);
+				personToList.push(dataObject[key]);
 			}
 		}
 	}
 }
-function getTrait(trait){
+function getTrait(traitType, userInput){
+	for(var key in dataObject){
+		if(userInput == dataObject[key][traitType]){
+			personToList.push(dataObject[key]);
+		}
+	}
+}
+function getPersonTrait(trait){
 	switch(trait){
 		case "gender":
 			var gender = prompt("Male or Female?");
@@ -341,23 +360,21 @@ function getTrait(trait){
 
 	}
 }
-function getPersonTrait(trait){
-	for(var key in dataObject){
-		if(dataObject.hasOwnProperty(key)){
-			if(trait === dataObject[key].gender){
-				console.log(dataObject[key]);
-			}else if(trait === dataObject[key].height + 1 || dataObject[key].height - 1){
-				console.log(dataObject[key]);
-			}else if(trait === dataObject[key].weight + 1 || dataObject[key].weight - 1){
-				console.log(dataObject[key]);
-			}else if(trait === dataObject.eyeColor){
-				console.log(dataObject[key]);
-			}
-		}
-	}
+
+function displayPerson(person){
+	var buildPerson = "";
+         for(var item in person){
+             buildPerson = buildPerson + item + ": " + JSON.stringify(person[item]) + "\r\n";
+         }
+         alert(buildPerson);
+         console.log(buildPerson);
 }
 function getFamily(){
 	// return list of names of immediate family members
+		for(var key in dataObject){
+		if(dataObject.hasOwnProperty(key)){
+		}
+	}
 }
 
 // there will be much more here, and some of the code above will certainly change
