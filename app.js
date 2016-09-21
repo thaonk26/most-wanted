@@ -305,10 +305,12 @@ function findPersonInfo(answer){
 
 		case "1":
 			var result = getPersonInfo(prompt("What is the person's first name?"),  prompt("What is their last name?"))
-			displayPerson(personToList);
+			displayPerson(dataObject[result]);
 			break;
 		case "2":
 			var result = getPersonInfo(prompt("What is the person's first name?"),  prompt("What is their last name?"))
+			getDescendant(result);
+			displayListOfPeople(personToList);
 			//console.log(result);
 			break;
 		case "3":
@@ -318,7 +320,7 @@ function findPersonInfo(answer){
 			break;
 		case "4":
 			var result = prompt("How old are they?")
-			getTrait("age",result);
+			getAge(result);
 			displayListOfPeople(personToList);
 		default:
 			alert("I'm sorry, but that's not an option. Please try again")
@@ -333,15 +335,22 @@ function getPersonInfo(firstname,lastname){
 			//console.log(obj.firstName, obj.lastName);
 			if(firstname === dataObject[key].firstName && lastname === dataObject[key].lastName){
 				//console.log(dataObject[key]);
-				personToList.push(dataObject[key]);
+				return key;
 			}
 		}
 	}
 }
 function getAge(age){
+	var today = new Date();
+    var currentYear = today.getFullYear();
+    var currentMonth = today.getMonth();
+    var currentDay = today.getDate(); 
 	for(var key in dataObject){
-		var birth = dataObject[key].dob.split("/");
-
+		var birthdate = dataObject[key].dob.split("/");
+		var date = new Date(birthdate[2]-currentMonth, birthdate[1]-currentDay, birthdate[0]-currentYear);
+		if(date === birthdate){
+			personToList.push(key);
+		}
 	}
 }
 function getTrait(traitType, userInput){
@@ -382,6 +391,15 @@ function displayPerson(person){
          }
          alert(buildPerson);
          console.log(buildPerson);
+}
+function getDescendant(person){
+    for(var item in dataObject){
+        if(dataObject[item].parents.length !=0) {
+            if(dataObject[item].parents[0] == person || dataObject[item].parents[1] == person){
+                personToList.push(item);
+            }
+        }
+    }
 }
 function getFamily(){
 	// return list of names of immediate family members
