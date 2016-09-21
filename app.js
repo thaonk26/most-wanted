@@ -277,17 +277,35 @@ printAllToConsole(dataObject);*/
 
 
 function initSearch(){
-	alert("Hello World");
 
 	// get all the information you need to run the search
-	var yourName = prompt("Who do you want to search for?");
-	var LName = prompt("What is their last name?");
 	// then pass that info to the respective function.
-	var result = getPersonInfo(yourName, LName)
-	console.log(result);
+	//var result = getPersonInfo(prompt("What is the person's first name?"),  prompt("What is their last name?"))
+	//console.log(result);
+	var answer = findPersonInfo(prompt("Type 1 if you know their first AND last name. Type 2 if you know only first OR last name. Type 3 if you want to search by their physical trait."));
 	// once the search is done, pass the results to the responder function
-}
 
+}
+function findPersonInfo(answer){
+	switch(answer){
+
+		case "1":
+			var result = getPersonInfo(prompt("What is the person's first name?"),  prompt("What is their last name?"))
+			console.log(result);
+			break;
+		case "2":
+			var result = getPersonInfo(prompt("What is the person's first name?"),  prompt("What is their last name?"))
+			//console.log(result);
+			break;
+		case "3":
+			var result = getPersonTrait(prompt("test"))
+			break;
+		default:
+			alert("I'm sorry, but that's not an option. Please try again")
+			initSearch();
+			break;
+	}
+}
 function getPersonInfo(firstname,lastname){
 
 	for (var key in dataObject) {
@@ -296,12 +314,12 @@ function getPersonInfo(firstname,lastname){
 			if(firstname === dataObject[key].firstName && lastname === dataObject[key].lastName){
 				//console.log(dataObject[key]);
 				return dataObject[key];
-		}
+			}
+				else if(firstname === dataObject[key].firstName || lastname === dataObject[key].lastName) {
+				console.log(dataObject[key]);
+			}
 		}
 	}
-
-
-
 }
 
 function getFamily(){
