@@ -298,7 +298,8 @@ function findPersonInfo(answer){
 			//console.log(result);
 			break;
 		case "3":
-			var result = getPersonTrait(prompt("test"))
+			var result = getTrait(prompt("What trait are you looking for? (gender, height, weight or eye color)"));
+			getPersonTrait(result);
 			break;
 		default:
 			alert("I'm sorry, but that's not an option. Please try again")
@@ -321,7 +322,40 @@ function getPersonInfo(firstname,lastname){
 		}
 	}
 }
+function getTrait(trait){
+	switch(trait){
+		case "gender":
+			var gender = prompt("Male or Female?");
+			return gender;
+		case "height":
+			var height = prompt("What is their aproximate height?")
+			return height;
+		case "weight":
+			var weight = prompt("What is their aproximate weight?")
+			return weight;
+		case "eye color":
+			var eyeColor = prompt("What is their eye color?");
+			return eyeColor;
+		default:
+			alert("Not a valid entry, please try again.")
 
+	}
+}
+function getPersonTrait(trait){
+	for(var key in dataObject){
+		if(dataObject.hasOwnProperty(key)){
+			if(trait === dataObject[key].gender){
+				console.log(dataObject[key]);
+			}else if(trait === dataObject[key].height + 1 || dataObject[key].height - 1){
+				console.log(dataObject[key]);
+			}else if(trait === dataObject[key].weight + 1 || dataObject[key].weight - 1){
+				console.log(dataObject[key]);
+			}else if(trait === dataObject.eyeColor){
+				console.log(dataObject[key]);
+			}
+		}
+	}
+}
 function getFamily(){
 	// return list of names of immediate family members
 }
