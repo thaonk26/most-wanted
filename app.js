@@ -274,7 +274,6 @@ var dataObject = {
 	}
 }
 printAllToConsole(dataObject);*/
-var personToList = [];
 /*var person = {
 	'person': [],
 	'heights': [],
@@ -301,43 +300,44 @@ function findPersonInfo() {
     switch (answer) {
 
         case "1":
-        	personToList = [];
+        	var personToList = [];
             var foundPerson = searchPrompt();
             if (foundPerson != 0 && foundPerson != undefined) {
                 displayPerson(dataObject[foundPerson]);
                 break;
             }
             alert("No data found.")
-             displayPerson(getSpouse(personToList));
+             
 
             break;
         case "2":
-            personToList = [];
+            var personToList = [];
             var foundPerson = searchPrompt();
-            getDescendant(foundPerson);
+            getDescendant(foundPerson, personToList);
             if(personToList == 0) error(undefined);
             displayListOfPeople(personToList);
             break;
         case "3":
-            personToList = [];
+            var personToList = [];
             var result = prompt("What trait are you looking for? (gender, height, weight or eye color)");
-            getTrait(result, getPersonTrait(result));
+            getTrait(result, getPersonTrait(result), personToList);
             displayListOfPeople(personToList);
             break;
         case "4":
-            personToList = [];
-            searchAge(prompt("How old are they?"));
+            var personToList = [];
+            searchAge(prompt("How old are they?"), personToList);
             displayListOfPeople(personToList);
             break;
         case "5":
-            personToList = [];
+            var personToList = [];
             var result = prompt("What occupation are you looking for?")
-            getOccupation(result);
+            getOccupation(result, personToList);
             displayListOfPeople(personToList);
             break;
         case "6":
+        	var personToList = [];
             var result = getDescendant(searchPrompt());
-            getSiblings(result);
+            immediateFamily(result,personToList)
             displayListOfPeople(personToList);
             //window.close();
             //endProgram();
@@ -369,11 +369,14 @@ function getPersonInfo(firstname, lastname) {
         }
     }
 }
-
-function searchAge(age) {
+function immediateFamily(result, list){
+	getSiblings(result);
+	getSpouse("currentSpouse",list);
+}
+function searchAge(age, list) {
     for (var a in dataObject) {
         if (getAge(dataObject[a].dob) == parseInt(age))
-            personToList.push(a);
+            list.push(a);
     }
 }
 
@@ -391,19 +394,20 @@ function getAge(age) {
     return ageYear;
 }
 
-function getSpouse(person) {
-    getTrait("currentSpouse", person);
+function getSpouse(person,list) {
+    getTrait("currentSpouse", person, list);
 }
 
-function getTrait(traitType, userInput) {
+function getTrait(traitType, userInput, list) {
     for (var key in dataObject) {
         if (userInput == dataObject[key][traitType]) {
-            personToList.push(key);
+            list.push(key);
         }
     }
 }
 
 function getPersonTrait(trait) {
+	var trait = prompt("");
     switch (trait) {
         case "gender":
             var gender = prompt("Male or Female?");
@@ -419,8 +423,9 @@ function getPersonTrait(trait) {
             return eyeColor;
         default:
             alert("Not a valid entry, please try again.")
-
+            break;
     }
+    findPersonInfo();
 }
 
 function displayListOfPeople(listOfPeople) {
@@ -438,11 +443,11 @@ function displayPerson(person) {
     console.log(buildPerson);
 }
 
-function getDescendant(person) {
+function getDescendant(person, list) {
     for (var item in dataObject) {
         if (dataObject[item].parents.length != 0) {
             if (dataObject[item].parents[0] == person || dataObject[item].parents[1] == person) {
-                personToList.push(item);
+                list.push(item);
             }
         }
     }
@@ -458,21 +463,13 @@ function getSiblings(person) {
     }
 }
 
-function getOccupation(userInput) {
+function getOccupation(userInput, list) {
     for (var key in dataObject) {
         if (userInput == dataObject[key].occupation) {
-            personToList.push(key);
+            list.push(key);
         }
     }
 }
-
-function getFamily() {
-    // return list of names of immediate family members
-    for (var key in dataObject) {
-        if (dataObject.hasOwnProperty(key)) {}
-    }
-}
-
 
 function error(checkError){
     try{
