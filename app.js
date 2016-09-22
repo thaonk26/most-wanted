@@ -336,8 +336,7 @@ function findPersonInfo() {
             break;
         case "6":
         	var personToList = [];
-            var result = getDescendant(searchPrompt());
-            immediateFamily(result,personToList)
+            immediateFamily(getDescendant(searchPrompt(),personToList),personToList)
             displayListOfPeople(personToList);
             //window.close();
             //endProgram();
@@ -370,8 +369,8 @@ function getPersonInfo(firstname, lastname) {
     }
 }
 function immediateFamily(result, list){
-	getSiblings(result);
-	getSpouse("currentSpouse",list);
+	getSiblings(result, list);
+	getSpouse(list,list);
 }
 function searchAge(age, list) {
     for (var a in dataObject) {
@@ -379,7 +378,6 @@ function searchAge(age, list) {
             list.push(a);
     }
 }
-
 function getAge(age) {
     var today = new Date();
     var currentDOB = age.split("/");
@@ -394,8 +392,8 @@ function getAge(age) {
     return ageYear;
 }
 
-function getSpouse(person,list) {
-    getTrait("currentSpouse", person, list);
+function getSpouse(list, family) {
+    getTrait("currentSpouse", list, family);
 }
 
 function getTrait(traitType, userInput, list) {
@@ -451,9 +449,10 @@ function getDescendant(person, list) {
             }
         }
     }
+    return person;
 }
 
-function getSiblings(person) {
+function getSiblings(person,personToList) {
     for (var key in dataObject) {
         if (person.length != 0 && person.length != undefined) {
             if (person[0] == dataObject[key].parents || person[1] == dataObject[key].parents) {
