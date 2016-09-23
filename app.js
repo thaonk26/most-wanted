@@ -292,7 +292,7 @@ function findPersonInfo() {
         " Type 2 if you want to search for a person's descendant(s). \n** First and last name required **\r\n" +
         " Type 3 if you want to search by physical traits (up to 5 traits).\r\n" +
         " Type 4 if you want to search by age.\r\n" +
-        " Type 5 if you want to search by occupation.\r\n" +
+        " Type 5 if you want to search by age range.\r\n" +
         " Type 6 if you want to search by immediate family.\r\n" +
         " Type 7 if you want to search by next of kin.\r\n" +
         " Type \"exit\" if you want to end the program."
@@ -318,7 +318,7 @@ function findPersonInfo() {
             break;
         case "3":
             var personToList = [];
-            var result = prompt("What trait are you looking for? (gender, height, weight or eye color)");
+            var result = prompt("Pick up to five traits to search. (gender, height, weight, eye color or occupation)");
             getTrait(result, getPersonTrait(result), personToList);
             displayListOfPeople(personToList, "Traits: \r\n");
             break;
@@ -333,10 +333,16 @@ function findPersonInfo() {
             error(undefined);
             break;
         case "5":
-            var personToList = [];
-            var result = prompt("What occupation are you looking for?")
-            getOccupation(result, personToList);
-            displayListOfPeople(personToList, "Occupation: \r\n");
+            ageRangeSearch(prompt("What is the youngest age you think they are?"),prompt("What is the oldest age you think they are?"), personToList);
+            if(personToList != 0){
+            displayListOfPeople(personToList, "Age: \r\n");
+            break;
+            }
+            error(undefined);
+            // var personToList = [];
+            // var result = prompt("What occupation are you looking for?")
+            // getOccupation(result, personToList);
+            // displayListOfPeople(personToList, "Occupation: \r\n");
             break;
         case "6":
             var personToList = [];
@@ -486,6 +492,9 @@ function getPersonTrait(trait) {
         case "eye color":
             var eyeColor = prompt("What is their eye color?");
             return eyeColor;
+        case "occupation":
+
+            return occupation;
         default:
             alert("Not a valid entry, please try again.")
             break;
@@ -571,13 +580,13 @@ function getSiblings(person, personToList) {
     return siblings;
 }
 
-function getOccupation(userInput, list) {
-    for (var key in dataObject) {
-        if (userInput == dataObject[key].occupation) {
-            list.push(key);
-        }
-    }
-}
+// function getOccupation(userInput, list) {
+//     for (var key in dataObject) {
+//         if (userInput == dataObject[key].occupation) {
+//             list.push(key);
+//         }
+//     }
+// }
 
 function checkDuplicates(list) {
     var temp = [];
