@@ -343,8 +343,8 @@ function findPersonInfo() {
         case "7":
         	var personToList = [];
         	getDescendant(searchPrompt(),personToList);
-        	
-        	displayPerson(getOldest(personToList), "The Oldest Child: \r\n");
+        	displayPerson(dataObject[getOldest(personToList)], "Next of Kin: \r\n");
+        	break;
         default:
             alert("I'm sorry, but that's not an option. Please try again")
             break;
