@@ -304,7 +304,7 @@ function findPersonInfo() {
             var personToList = [];
             var foundPerson = searchPrompt();
             if (foundPerson != 0 && foundPerson != undefined) {
-                displayPerson(dataObject[foundPerson]);
+                displayPerson(dataObject[foundPerson], "Person Requested:\r\n");
                 break;
             }
             alert("No data found.")
@@ -313,7 +313,7 @@ function findPersonInfo() {
             var personToList = [];
             var foundPerson = searchPrompt();
             getGrandKids(getDescendant(foundPerson, personToList), personToList);
-            if (personToList == 0) error(undefined);
+            if (personToList == 0) {error(undefined);}
             displayListOfPeople(personToList, "Descendant(s): \r\n");
             break;
         case "3":
@@ -324,8 +324,13 @@ function findPersonInfo() {
             break;
         case "4":
             var personToList = [];
-            searchAge(prompt("How old are they?"), personToList);
+            //searchAge(prompt("How old are they?"), personToList);
+            ageRangeSearch(prompt("What is the youngest age you think they are?"),prompt("What is the oldest age you think they are?"), personToList);
+            if(personToList != 0){
             displayListOfPeople(personToList, "Age: \r\n");
+            break;
+            }
+            error(undefined);
             break;
         case "5":
             var personToList = [];
@@ -383,7 +388,12 @@ function searchAge(age, list) {
             list.push(a);
     }
 }
-
+function ageRangeSearch(start, end, list){
+	for(var key in dataObject){
+		if(getAge(dataObject[key].dob) > start && getAge(dataObject[key].dob) < end);
+		 {list.push(key);}
+	}
+}
 function getAge(age) {
     var today = new Date();
     var currentDOB = age.split("/");
@@ -498,11 +508,17 @@ function displayPerson(person, label) {
     		for (var i = 0; i < person[key].length; i++){
   					buildPerson = buildPerson + key + " " + (i + 1) + ": " + dataObject[person[key][i]].firstName + " " + dataObject[person[key][i]].lastName + "\r\n";
   				}
-    	}else if(key == "currentSpouse"){
-    		buildPerson = buildPerson + key + ": " + dataObject[person[key]].firstName + " " + dataObject[person[key]].lastName + "\r\n";
+    	}else if(key == "currentSpouse" && person[key] != null){
+    		buildPerson = buildPerson + "Spouse: " + dataObject[person[key]].firstName + " " + dataObject[person[key]].lastName + "\r\n";
+    	}else if (key == "currentSpouse" && person[key] == null){
+    		buildPerson = buildPerson + "Spouse: " + "Single and ready to MINGLE!\r\n";
+    	}else if(key == "dob"){
+    		buildPerson = buildPerson + key + ": " + JSON.stringify(person[key]) + "\r\n";
+    		buildPerson = buildPerson + "Age: " + getAge(person[key]) + "\r\n";
     	}else 
         buildPerson = buildPerson + key + ": " + JSON.stringify(person[key]) + "\r\n";
     }
+    
     alert(buildPerson);
     console.log(buildPerson);
 }
@@ -560,6 +576,17 @@ function getOccupation(userInput, list) {
         }
     }
 }
+
+function checkDuplicates(list) {
+    var temp = [];
+    for (var i = 0; i < list.length; i++) {
+        if (temp.indexOf(list[i]) == -1) {
+            temp.push(list[i]);
+        }
+    }
+    return temp;
+}
+
 function error(checkError) {
     try {
         if (checkError == undefined)
@@ -567,7 +594,7 @@ function error(checkError) {
     } catch (error) {
         console.log(error.message);
         console.log("Error - There is no data");
-        alert("Error - This person has no descendants")
+        alert("Error - No person fits that criteria")
     }
     return checkError;
 }
