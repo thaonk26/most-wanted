@@ -340,6 +340,11 @@ function findPersonInfo() {
             //window.close();
             //endProgram();
             break;
+        case "7":
+        	var personToList = [];
+        	getDescendant(searchPrompt(),personToList);
+        	
+        	displayPerson(getOldest(personToList), "The Oldest Child: \r\n");
         default:
             alert("I'm sorry, but that's not an option. Please try again")
             break;
@@ -469,7 +474,7 @@ function displayPerson(person, label) {
 
 function immediateFamily(result, list){
     getParents(dataObject[result].parents, list);
-    getSiblings(result, list);
+    getSiblings(dataObject[result].parents, list);
     getSpouse(result, list);
 }
 function getParents(person, list){
@@ -492,7 +497,7 @@ function getDescendant(person, list) {
 function getSiblings(person,personToList) {
     for (var key in dataObject) {
         if (person.length != 0 && person.length != undefined) {
-            if (person[0] == dataObject[key].parents || person[1] == dataObject[key].parents) {
+            if (person[0] == dataObject[key].parents[0] || person[1] == dataObject[key].parents[1]|| person[0] == dataObject[key].parents[1]|| person[1] == dataObject[key].parents[0]) {
                 personToList.push(key);
             }
         }
