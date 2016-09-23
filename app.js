@@ -286,8 +286,8 @@ printAllToConsole(dataObject);*/
 };*/
 findPersonInfo();
 
-function findPersonInfo() { 
-        var answer = prompt(
+function findPersonInfo() {
+    var answer = prompt(
         "Type 1 if you want to search by first AND last name.\r\n" +
         " Type 2 if you want to search for a person's descendant(s). \n** First and last name required **\r\n" +
         " Type 3 if you want to search by physical traits (up to 5 traits).\r\n" +
@@ -313,7 +313,7 @@ function findPersonInfo() {
             var personToList = [];
             var foundPerson = searchPrompt();
             getGrandKids(getDescendant(foundPerson, personToList), personToList);
-            if(personToList == 0) error(undefined);
+            if (personToList == 0) error(undefined);
             displayListOfPeople(personToList, "Descendant(s): \r\n");
             break;
         case "3":
@@ -335,25 +335,25 @@ function findPersonInfo() {
             break;
         case "6":
             var personToList = [];
-            immediateFamily(searchPrompt(),personToList)
+            immediateFamily(searchPrompt(), personToList)
             displayListOfPeople(personToList, "Immediate Family: \r\n");
             //window.close();
             //endProgram();
             break;
         case "7":
-        	var personToList = [];
-        	getNextOfKin(searchPrompt(),personToList);
-        	if(personToList != 0){
-        	displayPerson(dataObject[getOldest(personToList)], "Next of Kin: \r\n");
-        	break;
-        	}
-        	alert("This person has no Next of Kin.")
-        	break;
+            var personToList = [];
+            getNextOfKin(searchPrompt(), personToList);
+            if (personToList != 0) {
+                displayPerson(dataObject[getOldest(personToList)], "Next of Kin: \r\n");
+                break;
+            }
+            alert("This person has no Next of Kin.")
+            break;
         default:
             alert("I'm sorry, but that's not an option. Please try again")
             break;
     }
-        //findPersonInfo();
+    //findPersonInfo();
 }
 
 function endProgram() {
@@ -383,6 +383,7 @@ function searchAge(age, list) {
             list.push(a);
     }
 }
+
 function getAge(age) {
     var today = new Date();
     var currentDOB = age.split("/");
@@ -397,44 +398,55 @@ function getAge(age) {
     return ageYear;
 }
 
-function getOldest(listOfPeople){
-         var OldestPerson = undefined;
-         for (var i = 0; i < listOfPeople.length; i++) {
-             var currentDOB = dataObject[listOfPeople[i]].dob.split("/");
-             if(OldestPerson != undefined){
-                 var lastDOB = dataObject[OldestPerson].dob.split("/");
-             }
-             if(OldestPerson == undefined){
-                 OldestPerson = listOfPeople[i];
-             } else if(currentDOB[2] < lastDOB[2]){
-                 OldestPerson = listOfPeople[i];
-             }
-         }
-         return OldestPerson;
-     }
+function getOldest(listOfPeople) {
+    var OldestPerson = undefined;
+    for (var i = 0; i < listOfPeople.length; i++) {
+        var currentDOB = dataObject[listOfPeople[i]].dob.split("/");
+        if (OldestPerson != undefined) {
+            var lastDOB = dataObject[OldestPerson].dob.split("/");
+        }
+        if (OldestPerson == undefined) {
+            OldestPerson = listOfPeople[i];
+        } else if (currentDOB[2] < lastDOB[2]) {
+            OldestPerson = listOfPeople[i];
+        }
+    }
+    return OldestPerson;
+}
 
 function sortByOldest(list) {
     var tmp = [];
-    for (var i = 0; i < list.length; i++) { 
-    for (var j = 0; j < list.length; j++) { 
-        
-        if (list[j] > list[j+1]) {
-         tmp = list[j];
-         list[j] = list[j + 1];
-         list[j + 1] = tmp;
+    for (var i = 0; i < list.length; i++) {
+        for (var j = 0; j < list.length; j++) {
+
+            if (list[j] > list[j + 1]) {
+                tmp = list[j];
+                list[j] = list[j + 1];
+                list[j + 1] = tmp;
+            }
         }
     }
 }
-}
-function getNextOfKin(person, list) {
-   getSpouse(person, list);
-   if (person.length == 0) { getDescendant(person,list);}   
-   if (person.length == 0) { getParents(dataObject[person].parents, list);}
-   if (person.length == 0) { getSiblings(dataObject[person].parents, list);}
-   if (person.length == 0) { getDescendant(list,list);}
-   
 
+function getNextOfKin(person, list) {
+    getSpouse(person, list);
+    var kin = [];
+    var siblingKin = [];
+    if (list.length == 0) {
+        kin = getDescendant(person, list);
+    }
+    if (list.length == 0) {
+        getParents(dataObject[person].parents, list);
+    }
+    if (list.length == 0) {
+        siblingKin = getSiblings(dataObject[person].parents, list);
+    }
+    if (list.length == 0) {
+        getGrandKids(kin, list);
+        getGrandKids(siblingKin, list);
+    }
 }
+
 function getSpouse(person, list) {
     getTrait("currentSpouse", person, list);
 }
@@ -442,7 +454,9 @@ function getSpouse(person, list) {
 function getTrait(traitType, userInput, list) {
     for (var key in dataObject) {
         if (userInput == dataObject[key][traitType]) {
-            list.push(key);
+            if (dataObject[key][traitType] != key) {
+                list.push(key);
+            }
         }
     }
 }
@@ -471,7 +485,7 @@ function getPersonTrait(trait) {
 
 function displayListOfPeople(listOfPeople, label) {
     for (var i = 0; i < listOfPeople.length; i++) {
-        displayPerson(dataObject[listOfPeople[i]],label);
+        displayPerson(dataObject[listOfPeople[i]], label);
     }
 }
 
@@ -484,43 +498,50 @@ function displayPerson(person, label) {
     console.log(buildPerson);
 }
 
-function immediateFamily(result, list){
-	getDescendant(result,list);
+function immediateFamily(result, list) {
+    getDescendant(result, list);
     getParents(dataObject[result].parents, list);
     getSiblings(dataObject[result].parents, list);
     getSpouse(result, list);
 }
-function getParents(person, list){
-    for (var i=0; i < person.length; i++) {
+
+function getParents(person, list) {
+    for (var i = 0; i < person.length; i++) {
         list.push(person[i]);
     }
 }
 
 function getDescendant(person, list) {
-	var kids = [];
+    var kids = [];
     for (var item in dataObject) {
         if (dataObject[item].parents.length != 0) {
-          		if (dataObject[item].parents[0] == person || dataObject[item].parents[1] == person) {
-                	list.push(item);
-                	kids.push(item);
-            	}
-        }	
-    }
-    return kids;
-}
-function getGrandKids(person, list){
-	for(var i = 0; i < person.length; i++){
-		getDescendant(person[i],list);
-	}
-}
-function getSiblings(person,personToList) {
-    for (var key in dataObject) {
-        if (person.length != 0 && person.length != undefined) {
-            if (person[0] == dataObject[key].parents[0] || person[1] == dataObject[key].parents[1]|| person[0] == dataObject[key].parents[1]|| person[1] == dataObject[key].parents[0]) {
-                personToList.push(key);
+            if (dataObject[item].parents[0] == person || dataObject[item].parents[1] == person) {
+                list.push(item);
+                kids.push(item);
             }
         }
     }
+    return kids;
+}
+
+function getGrandKids(person, list) {
+    for (var i = 0; i < person.length; i++) {
+        getDescendant(person[i], list);
+    }
+}
+
+function getSiblings(person, personToList) {
+    var siblings = [];
+    for (var key in dataObject) {
+        if (person.length != 0 && person.length != undefined) {
+            if (person[0] == dataObject[key].parents[0] || person[1] == dataObject[key].parents[1] ||
+                person[0] == dataObject[key].parents[1] || person[1] == dataObject[key].parents[0]) {
+                personToList.push(key);
+                siblings.push(key);
+            }
+        }
+    }
+    return siblings;
 }
 
 function getOccupation(userInput, list) {
@@ -530,20 +551,22 @@ function getOccupation(userInput, list) {
         }
     }
 }
-function checkDuplicates(list){
-	 var temp = [];
-	 for(var i = 0; i<list.length; i++){
-	 	if(temp.indexOf(list[i]) == -1){
-	 		temp.push(list[i]);
-	 	}
-	 }
-	 return temp;
+
+function checkDuplicates(list) {
+    var temp = [];
+    for (var i = 0; i < list.length; i++) {
+        if (temp.indexOf(list[i]) == -1) {
+            temp.push(list[i]);
+        }
+    }
+    return temp;
 }
-function error(checkError){
-    try{
-    if(checkError == undefined)
-        throw('Error');
-    }catch(error){
+
+function error(checkError) {
+    try {
+        if (checkError == undefined)
+            throw ('Error');
+    } catch (error) {
         console.log(error.message);
         console.log("Error - There is no data");
         alert("Error - This person has no descendants")
