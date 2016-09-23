@@ -492,6 +492,15 @@ function displayListOfPeople(listOfPeople, label) {
 function displayPerson(person, label) {
     var buildPerson = "" + label;
     for (var key in person) {
+    	if(key == "weight"){
+    		buildPerson = buildPerson + key + ": " + JSON.stringify(person[key]) + " lbs\r\n";
+    	}else if(key == "parents"){
+    		for (var i = 0; i < person[key].length; i++){
+  					buildPerson = buildPerson + key + " " + (i + 1) + ": " + dataObject[person[key][i]].firstName + " " + dataObject[person[key][i]].lastName + "\r\n";
+  				}
+    	}else if(key == "currentSpouse"){
+    		buildPerson = buildPerson + key + ": " + dataObject[person[key]].firstName + " " + dataObject[person[key]].lastName + "\r\n";
+    	}else 
         buildPerson = buildPerson + key + ": " + JSON.stringify(person[key]) + "\r\n";
     }
     alert(buildPerson);
@@ -551,17 +560,6 @@ function getOccupation(userInput, list) {
         }
     }
 }
-
-function checkDuplicates(list) {
-    var temp = [];
-    for (var i = 0; i < list.length; i++) {
-        if (temp.indexOf(list[i]) == -1) {
-            temp.push(list[i]);
-        }
-    }
-    return temp;
-}
-
 function error(checkError) {
     try {
         if (checkError == undefined)
