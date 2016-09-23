@@ -515,7 +515,9 @@ function displayPerson(person, label) {
     	}else if(key == "dob"){
     		buildPerson = buildPerson + key + ": " + JSON.stringify(person[key]) + "\r\n";
     		buildPerson = buildPerson + "Age: " + getAge(person[key]) + "\r\n";
-    	}else 
+    	}else if(key == "height"){
+    		buildPerson = buildPerson + key + ": " + Math.round(person[key] / 12) + "'" + (person[key] % 12) + "\"\r\n";
+    	}else
         buildPerson = buildPerson + key + ": " + JSON.stringify(person[key]) + "\r\n";
     }
     
