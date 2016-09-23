@@ -319,7 +319,8 @@ function findPersonInfo() {
         case "3":
             var personToList = [];
             var result = prompt("Pick up to five traits to search. (gender, height, weight, eye color or occupation)");
-            getTrait(result, getPersonTrait(result), personToList);
+            separateTraits(result, personToList);
+            //getTrait(result, getPersonTrait(result), personToList);
             displayListOfPeople(personToList, "Traits: \r\n");
             break;
         case "4":
@@ -501,7 +502,21 @@ function getPersonTrait(trait) {
     }
     findPersonInfo();
 }
-
+function separateTraits(listOfTraits, listOfPeople){
+	var trait = undefined;
+	if(listOfTraits.length > 1){
+		for(var key in dataObject){
+			for(var i = 0; i < listOfTraits.length; i++){
+				var currentTrait = listOfTraits[i].split(",");
+				if(dataObject[key] == listOfTraits[i]){
+					listOfPeople.push(key);
+				}
+			}
+		}
+	}else {
+		getTrait(traitType,userInput, list);
+	}
+}
 function displayListOfPeople(listOfPeople, label) {
     for (var i = 0; i < listOfPeople.length; i++) {
         displayPerson(dataObject[listOfPeople[i]], label);
