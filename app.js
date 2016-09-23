@@ -312,7 +312,7 @@ function findPersonInfo() {
         case "2":
             var personToList = [];
             var foundPerson = searchPrompt();
-            getDescendant(foundPerson, personToList);
+            getGrandKids(getDescendant(foundPerson, personToList), personToList);
             if(personToList == 0) error(undefined);
             displayListOfPeople(personToList, "Descendant(s): \r\n");
             break;
@@ -335,15 +335,19 @@ function findPersonInfo() {
             break;
         case "6":
             var personToList = [];
-            immediateFamily(getDescendant(searchPrompt(),personToList),personToList)
+            immediateFamily(searchPrompt(),personToList)
             displayListOfPeople(personToList, "Immediate Family: \r\n");
             //window.close();
             //endProgram();
             break;
         case "7":
         	var personToList = [];
-        	getDescendant(searchPrompt(),personToList);
+        	getNextOfKin(searchPrompt(),personToList);
+        	if(personToList != 0){
         	displayPerson(dataObject[getOldest(personToList)], "Next of Kin: \r\n");
+        	break;
+        	}
+        	alert("This person has no Next of Kin.")
         	break;
         default:
             alert("I'm sorry, but that's not an option. Please try again")
@@ -422,7 +426,15 @@ function sortByOldest(list) {
     }
 }
 }
+function getNextOfKin(person, list) {
+   getSpouse(person, list);
+   if (person.length == 0) { getDescendant(person,list);}   
+   if (person.length == 0) { getParents(dataObject[person].parents, list);}
+   if (person.length == 0) { getSiblings(dataObject[person].parents, list);}
+   if (person.length == 0) { getDescendant(list,list);}
+   
 
+}
 function getSpouse(person, list) {
     getTrait("currentSpouse", person, list);
 }
@@ -473,6 +485,7 @@ function displayPerson(person, label) {
 }
 
 function immediateFamily(result, list){
+	getDescendant(result,list);
     getParents(dataObject[result].parents, list);
     getSiblings(dataObject[result].parents, list);
     getSpouse(result, list);
@@ -484,16 +497,22 @@ function getParents(person, list){
 }
 
 function getDescendant(person, list) {
+	var kids = [];
     for (var item in dataObject) {
         if (dataObject[item].parents.length != 0) {
-            if (dataObject[item].parents[0] == person || dataObject[item].parents[1] == person) {
-                list.push(item);
-            }
-        }
+          		if (dataObject[item].parents[0] == person || dataObject[item].parents[1] == person) {
+                	list.push(item);
+                	kids.push(item);
+            	}
+        }	
     }
-    return person;
+    return kids;
 }
-
+function getGrandKids(person, list){
+	for(var i = 0; i < person.length; i++){
+		getDescendant(person[i],list);
+	}
+}
 function getSiblings(person,personToList) {
     for (var key in dataObject) {
         if (person.length != 0 && person.length != undefined) {
@@ -511,7 +530,15 @@ function getOccupation(userInput, list) {
         }
     }
 }
-
+function checkDuplicates(list){
+	 var temp = [];
+	 for(var i = 0; i<list.length; i++){
+	 	if(temp.indexOf(list[i]) == -1){
+	 		temp.push(list[i]);
+	 	}
+	 }
+	 return temp;
+}
 function error(checkError){
     try{
     if(checkError == undefined)
