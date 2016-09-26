@@ -297,11 +297,11 @@ function findPersonInfo() {
         " Type 7 if you want to search by next of kin.\r\n" +
         " Type \"exit\" if you want to end the program."
     );
-
+	var personToList = [];
     switch (answer) {
 
         case "1":
-            var personToList = [];
+            personToList = [];
             var foundPerson = searchPrompt();
             if (foundPerson != 0 && foundPerson != undefined) {
                 displayPerson(dataObject[foundPerson], "Person Requested:\r\n");
@@ -310,23 +310,23 @@ function findPersonInfo() {
             alert("No data found.")
             break;
         case "2":
-            var personToList = [];
+            personToList = [];
             var foundPerson = searchPrompt();
             getGrandKids(getDescendant(foundPerson, personToList), personToList);
             if (personToList == 0) {error(undefined);}
             displayListOfPeople(personToList, "Descendant(s): \r\n");
             break;
         case "3":
-            var personToList = [];
+            personToList = [];
             var result = prompt("Pick up to five traits to search. (gender, height, weight, eye color or occupation)");
             separateTraits(result, personToList);
             //getTrait(result, getPersonTrait(result), personToList);
             displayListOfPeople(personToList, "Traits: \r\n");
             break;
         case "4":
-            var personToList = [];
-            //searchAge(prompt("How old are they?"), personToList);
-            ageRangeSearch(prompt("What is the youngest age you think they are?"),prompt("What is the oldest age you think they are?"), personToList);
+            personToList = [];
+            searchAge(prompt("How old are they?"), personToList);
+            //ageRangeSearch(prompt("What is the youngest age you think they are?"),prompt("What is the oldest age you think they are?"), personToList);
             if(personToList != 0){
             displayListOfPeople(personToList, "Age: \r\n");
             break;
@@ -334,26 +334,24 @@ function findPersonInfo() {
             error(undefined);
             break;
         case "5":
+        	personToList = [];
             ageRangeSearch(prompt("What is the youngest age you think they are?"),prompt("What is the oldest age you think they are?"), personToList);
             if(personToList != 0){
             displayListOfPeople(personToList, "Age: \r\n");
             break;
             }
             error(undefined);
-            // var personToList = [];
-            // var result = prompt("What occupation are you looking for?")
-            // getOccupation(result, personToList);
-            // displayListOfPeople(personToList, "Occupation: \r\n");
+            
             break;
         case "6":
-            var personToList = [];
+            personToList = [];
             immediateFamily(searchPrompt(), personToList)
             displayListOfPeople(personToList, "Immediate Family: \r\n");
             //window.close();
             //endProgram();
             break;
         case "7":
-            var personToList = [];
+            personToList = [];
             getNextOfKin(searchPrompt(), personToList);
             if (personToList != 0) {
                 displayPerson(dataObject[getOldest(personToList)], "Next of Kin: \r\n");
@@ -397,7 +395,7 @@ function searchAge(age, list) {
 }
 function ageRangeSearch(start, end, list){
 	for(var key in dataObject){
-		if(getAge(dataObject[key].dob) > start && getAge(dataObject[key].dob) < end);
+		if(getAge(dataObject[key].dob) >= start && getAge(dataObject[key].dob) <= end)
 		 {list.push(key);}
 	}
 }
@@ -506,8 +504,9 @@ function separateTraits(listOfTraits, listOfPeople){
 	var trait = undefined;
 	if(listOfTraits.length > 1){
 		for(var key in dataObject){
-			for(var i = 0; i < listOfTraits.length; i++){
-				var currentTrait = listOfTraits[i].split(",");
+			for(var i = 0; i < listOfTraits; i++){
+				var z = listOfTraits.split(',');
+				//var currentTrait = z.map(i => parseInt(i) ? parseInt(i) : i);
 				if(dataObject[key] == listOfTraits[i]){
 					listOfPeople.push(key);
 				}
@@ -594,14 +593,6 @@ function getSiblings(person, personToList) {
     }
     return siblings;
 }
-
-// function getOccupation(userInput, list) {
-//     for (var key in dataObject) {
-//         if (userInput == dataObject[key].occupation) {
-//             list.push(key);
-//         }
-//     }
-// }
 
 function checkDuplicates(list) {
     var temp = [];
